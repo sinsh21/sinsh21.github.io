@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <!-- Standard favicon -->
+<link rel="icon" type="image/jpeg" sizes="16x16" href="favicon-16x16.jpg">
+<link rel="icon" type="image/jpeg" sizes="32x32" href="favicon-32x32.jpg">
+<link rel="icon" type="image/jpeg" href="favicon.jpg">
+
+<!-- Apple Touch Icon (for iOS home screens) -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.jpg">
+
+<!-- Android Chrome -->
+<link rel="icon" type="image/jpeg" sizes="192x192" href="android-chrome-192x192.jpg">
+<link rel="icon" type="image/jpeg" sizes="512x512" href="android-chrome-512x512.jpg">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attention Reboot - Dopamine Recovery Protocol</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="top-nav">
+            <div class="nav-brand">
+                <span class="brand-icon">🧘</span>
+                <h1>Attention Reboot - Dopamine Recovery</h1>
+            </div>
+            <div class="nav-links">
+                <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+                <button class="nav-btn" data-page="skills">Skill Trees</button>
+                <button class="nav-btn" data-page="achievements">Achievements</button>
+                <button class="nav-btn" data-page="shop">Power-Ups</button>
+                <button class="nav-btn" data-page="stats">Statistics</button>
+                <button class="nav-btn" data-page="leaderboard">Leaderboard</button>
+                <button class="nav-btn nav-btn-reset" onclick="resetGameData()" style="color: #ff5459; margin-left: 16px;">⟲ Reset</button>
+            </div>
+        </nav>
+
+        <!-- Pages Container -->
+        <div class="pages-container">
+            <!-- Dashboard Page -->
+            <div class="page active" id="dashboard-page">
+                <!-- Recovery Days Counter -->
+                <div class="recovery-timeline">
+                    <div class="timeline-header">
+                        <div class="timeline-days">
+                            <span class="days-label">Recovery Day</span>
+                            <span class="days-value" id="recovery-days">1</span>
+                        </div>
+                        <div class="timeline-phase">
+                            <span class="phase-indicator" id="current-phase">Phase 1: Withdrawal &amp; Stabilization</span>
+                        </div>
+                    </div>
+                    <div class="timeline-message" id="timeline-message">
+                        Your dopamine is crashed. Everything feels boring/impossible. This is the worst. You've got this.
+                    </div>
+                </div>
+
+                <!-- XP Counter -->
+                <div class="xp-display">
+                    <div class="xp-label">Total XP</div>
+                    <div class="xp-value" id="total-xp">0</div>
+                    <div class="xp-glow"></div>
+                </div>
+
+                <!-- Level Progress -->
+                <div class="level-container">
+                    <div class="level-info">
+                        <span class="level-label">Level</span>
+                        <span class="level-value" id="player-level">1</span>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="level-progress"></div>
+                        <div class="progress-text" id="level-progress-text">0 / 100 XP</div>
+                    </div>
+                </div>
+
+                <!-- Today's Stats -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-value" id="today-minutes">0</div>
+                        <div class="stat-label">Focus Minutes Today</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-value" id="streak-count">0</div>
+                        <div class="stat-label">Day Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✅</div>
+                        <div class="stat-value" id="sessions-today">0</div>
+                        <div class="stat-label">Sessions Today</div>
+                    </div>
+                </div>
+
+                <!-- Focus Timer Section -->
+                <div class="timer-section">
+                    <h2>Focus Timer</h2>
+                    <div class="timer-container">
+                        <div class="timer-circle">
+                            <svg class="timer-svg" viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="90" class="timer-bg"></circle>
+                                <circle cx="100" cy="100" r="90" class="timer-progress" id="timer-progress-circle"></circle>
+                            </svg>
+                            <div class="timer-display" id="timer-display">00:00</div>
+                        </div>
+                        
+                        <div class="timer-controls" id="timer-setup">
+                            <div class="duration-selector">
+                                <button class="duration-btn" data-duration="5">5 min</button>
+                                <button class="duration-btn" data-duration="15">15 min</button>
+                                <button class="duration-btn active" data-duration="25">25 min</button>
+                                <button class="duration-btn" data-duration="45">45 min</button>
+                                <button class="duration-btn" data-duration="90">90 min</button>
+                                <input type="number" class="custom-duration" placeholder="Custom" min="1" max="480">
+                            </div>
+                            
+                            <div class="sound-selector">
+                                <label for="sound-select">Sound:</label>
+                                <select id="sound-select" class="form-control">
+                                    <option value="Silent Mode">Silent Mode</option>
+                                    <option value="White Noise">White Noise</option>
+                                    <option value="Brown Noise">Brown Noise</option>
+                                    <option value="Pink Noise">Pink Noise</option>
+                                    <option value="Binaural Beats (40 Hz)">Binaural Beats (40 Hz)</option>
+                                    <option value="Om Chanting (432 Hz)">Om Chanting (432 Hz)</option>
+                                    <option value="Rain + Cafe Ambience">Rain + Cafe Ambience</option>
+                                    <option value="Nature Sounds">Nature Sounds</option>
+                                </select>
+                            </div>
+                            
+                            <button class="btn btn--primary btn-start" id="start-timer">START FOCUS SESSION</button>
+                        </div>
+                        
+                        <div class="timer-controls hidden" id="timer-running">
+                            <div class="timer-info">
+                                <span id="current-sound">Silent Mode</span>
+                            </div>
+                            <div class="timer-actions">
+                                <button class="btn btn--secondary" id="pause-timer">Pause</button>
+                                <button class="btn btn--outline" id="stop-timer">Stop</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Total Mastery Display -->
+                <div class="total-mastery-display">
+                    <h3>Total Focus Mastery</h3>
+                    <div class="mastery-value"><span id="total-mastery-levels">3</span> / 36</div>
+                    <div class="mastery-subtitle">Levels Unlocked Across All Trees</div>
+                </div>
+
+                <!-- Skill Tree Cards -->
+                <div class="skill-tree-cards">
+                    <div class="skill-card" data-tree="sustained">
+                        <div class="skill-icon">🎯</div>
+                        <h3>Sustained Attention</h3>
+                        <div class="skill-level">Level <span id="sustained-level">1</span>/12</div>
+                        <div class="skill-progress-bar">
+                            <div class="skill-progress" id="sustained-progress"></div>
+                        </div>
+                        <button class="btn btn--secondary btn--sm">View Tree</button>
+                    </div>
+                    <div class="skill-card" data-tree="selective">
+                        <div class="skill-icon">🛡️</div>
+                        <h3>Selective Attention</h3>
+                        <div class="skill-level">Level <span id="selective-level">1</span>/12</div>
+                        <div class="skill-progress-bar">
+                            <div class="skill-progress" id="selective-progress"></div>
+                        </div>
+                        <button class="btn btn--secondary btn--sm">View Tree</button>
+                    </div>
+                    <div class="skill-card" data-tree="executive">
+                        <div class="skill-icon">👑</div>
+                        <h3>Executive Attention</h3>
+                        <div class="skill-level">Level <span id="executive-level">1</span>/12</div>
+                        <div class="skill-progress-bar">
+                            <div class="skill-progress" id="executive-progress"></div>
+                        </div>
+                        <button class="btn btn--secondary btn--sm">View Tree</button>
+                    </div>
+                </div>
+
+                <!-- Daily Quests -->
+                <div class="daily-quests">
+                    <h2>Daily Quests</h2>
+                    <div class="quest-list" id="quest-list"></div>
+                </div>
+            </div>
+
+            <!-- Skill Trees Page -->
+            <div class="page" id="skills-page">
+                <h2>Skill Trees</h2>
+                <div class="skill-tabs">
+                    <button class="skill-tab active" data-tree="sustained">Sustained Attention</button>
+                    <button class="skill-tab" data-tree="selective">Selective Attention</button>
+                    <button class="skill-tab" data-tree="executive">Executive Attention</button>
+                </div>
+                <div class="skill-tree-view" id="skill-tree-content">
+                    <!-- Skill tree levels will be dynamically inserted here -->
+                </div>
+            </div>
+
+            <!-- Achievements Page -->
+            <div class="page" id="achievements-page">
+                <h2>Achievements</h2>
+                <div class="achievements-grid" id="achievements-grid"></div>
+            </div>
+
+            <!-- Power-Ups Shop Page -->
+            <div class="page" id="shop-page">
+                <h2>Power-Ups Shop</h2>
+                <div class="shop-balance">
+                    <span>Available XP:</span>
+                    <span class="balance-amount" id="shop-xp">0</span>
+                </div>
+                <div class="shop-grid" id="shop-grid"></div>
+            </div>
+
+            <!-- Statistics Page -->
+            <div class="page" id="stats-page">
+                <h2>Statistics &amp; Recovery Timeline</h2>
+                
+                <!-- Recovery Progress -->
+                <div class="recovery-progress-section">
+                    <h3 style="text-align: center; color: var(--neon-cyan); margin-bottom: 24px;">Your Recovery Journey</h3>
+                    <div class="recovery-stats-grid">
+                        <div class="recovery-stat-box">
+                            <div class="recovery-stat-value" id="stats-days">0</div>
+                            <div class="recovery-stat-label">Days in Recovery</div>
+                            <div class="recovery-stat-sublabel">Target: 180 days to mastery</div>
+                        </div>
+                        <div class="recovery-stat-box">
+                            <div class="recovery-stat-value" id="stats-phase">Phase 1</div>
+                            <div class="recovery-stat-label">Current Phase</div>
+                            <div class="recovery-stat-sublabel" id="stats-phase-multiplier">1.0x XP Multiplier</div>
+                        </div>
+                        <div class="recovery-stat-box">
+                            <div class="recovery-stat-value" id="stats-progress">0%</div>
+                            <div class="recovery-stat-label">Journey Progress</div>
+                            <div class="recovery-stat-sublabel" id="stats-days-to-monk">180 days to Monk status</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Dopamine Recovery Milestones -->
+                    <div class="milestones-section">
+                        <h4 style="color: var(--neon-purple); margin-bottom: 16px; text-align: center;">Dopamine Recovery Milestones</h4>
+                        <div class="milestones-grid" id="milestones-grid"></div>
+                    </div>
+                </div>
+                
+                <div class="stats-overview">
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="total-hours">0</div>
+                        <div class="stat-box-label">Total Focus Hours</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="longest-streak">0</div>
+                        <div class="stat-box-label">Longest Streak</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="avg-duration">0</div>
+                        <div class="stat-box-label">Avg Session (min)</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-box-value" id="total-sessions">0</div>
+                        <div class="stat-box-label">Total Sessions</div>
+                    </div>
+                </div>
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3>Weekly Focus Hours</h3>
+                        <canvas id="weekly-chart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3>Focus Quality Over Time</h3>
+                        <canvas id="quality-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leaderboard Page -->
+            <div class="page" id="leaderboard-page">
+                <h2>Leaderboard</h2>
+                <div class="leaderboard-tabs">
+                    <button class="leaderboard-tab active" data-category="hours">Total Hours</button>
+                    <button class="leaderboard-tab" data-category="streak">Longest Streak</button>
+                    <button class="leaderboard-tab" data-category="level">Highest Level</button>
+                    <button class="leaderboard-tab" data-category="sessions">Deep Work Sessions</button>
+                    <button class="leaderboard-tab" data-category="distractions">Fewest Distractions</button>
+                </div>
+                <div class="leaderboard-content" id="leaderboard-content"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal hidden" id="rating-modal">
+        <div class="modal-content">
+            <h3>Session Complete! 🎉</h3>
+            <div id="phase-info" style="background: rgba(0,255,255,0.1); padding: 12px; border-radius: 8px; margin-bottom: 16px; border-left: 3px solid var(--neon-cyan);">
+                <strong style="color: var(--neon-cyan);">Current Phase:</strong> <span id="modal-phase">Phase 1</span><br>
+                <small style="color: var(--color-gray-300);">XP Multiplier: <span id="modal-multiplier">1.0x</span></small>
+            </div>
+            <p>Rate your focus quality (1-10):</p>
+            <div class="rating-slider">
+                <input type="range" min="1" max="10" value="7" id="quality-rating">
+                <div class="rating-value" id="rating-value">7</div>
+            </div>
+            <button class="btn btn--primary" id="submit-rating">Submit &amp; Earn XP</button>
+        </div>
+    </div>
+
+    <div class="modal hidden" id="levelup-modal">
+        <div class="modal-content levelup-content">
+            <div class="levelup-animation">⭐</div>
+            <h2>LEVEL UP!</h2>
+            <p class="levelup-text">You've reached Level <span id="new-level">2</span>!</p>
+            <button class="btn btn--primary" id="close-levelup">Continue</button>
+        </div>
+    </div>
+
+    <div class="notification hidden" id="notification"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
